@@ -1,32 +1,38 @@
+import { registerImage } from './lazy'
+
 const app = document.getElementById('app')
-app.className = 'grid gap-2 p-4 grid-cols-2 justify-items-center2'
+app.className = 'grid justify-items-center gap-2 p-4 grid-cols-4 justify-items-center2'
 
-const api = 'https://api.thecatapi.com/v1/images/search?limit=1'
+const minimum = 1;
+const maximum = 122;
+const random = () => Math.floor(Math.random() * (maximum - minimum)) + minimum;
 
-const btnCreateImg = document.createElement('button')
-btnCreateImg.className = 'w-32 h-10 bg-green-300 rounded-xl'
-btnCreateImg.textContent = 'Generar imagen'
+const btnCreateImg = document.getElementById('createImg')
 
-app.append(btnCreateImg)
+
+const btnDeleteImg = document.getElementById('deleteImg')
+
 
 btnCreateImg.addEventListener('click', createImg)
+
+btnDeleteImg.addEventListener('click', deleteImg)
+
+function deleteImg() {
+    app.innerHTML = ''
+}
 
 function createImg() {
 
         const figure = document.createElement('figure')
-        figure.className = 'w-40 h-40'
+        figure.className = 'w-40 h-40 overflow-hidden'
         
         const image = document.createElement('img')
+        image.className = 'object-cover w-full h-full bg-gray-300 rounded-xl'
+        image.dataset.src = `https://randomfox.ca/images/${random()}.jpg`
         
         figure.append(image)
-
-        const getData = async (url) => {
-            const res = await fetch(url)
-            const data = await res.json()
-            image.src = data[0].url
-        }
         
-        getData(api)
-        app.append(figure)        
+        
+        app.append(figure)      
+        registerImage(figure)  
 }
-
